@@ -1,0 +1,129 @@
+version: '3.8'
+
+services:
+    php:
+        container_name: dockersample_php
+        platform: ${DOCKER_PLATFORM:-linux/amd64}
+        image: php:8.2-apache
+        ports:
+            - '${FORWARD_PHP_PORT:-80}:80'
+        volumes:
+            - ./www:/var/www/html/
+        networks:
+            - dockersample_network
+    node:
+        container_name: dockersample_node
+        platform: ${DOCKER_PLATFORM:-linux/amd64}
+        image: "node:18"
+        user: "node"
+        working_dir: /home/node/app
+        volumes:
+            - ./:/home/node/app
+        environment:
+            - NODE_ENV=development
+        ports:
+            - '${FORWARD_NODE_PORT:-8080}:8080'
+        networks:
+            - dockersample_network
+        command: "npm run start"
+    bun:
+        container_name: dockersample_bun
+        platform: ${DOCKER_PLATFORM:-linux/amd64}
+        image: "oven/bun:1.0"
+        user: "bun"
+        working_dir: /home/bun/app
+        volumes:
+            - ./:/home/bun/app
+        ports:
+            - '${FORWARD_BUN_PORT:-8000}:8080'
+        networks:
+            - dockersample_network
+        command: "bun run bun-start"
+    mysql:
+        container_name: dockersample_mysql
+        platform: ${DOCKER_PLATFORM:-linux/amd64}
+        image: mysql:8.1.0
+        ports:
+            - '${FORWARD_MYSQL_PORT:-3306}:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_USER: ${MYSQL_USERNAME}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+        volumes:
+            - ./data/mysql:/var/lib/mysql
+        networks:
+            - dockersample_network
+    phpmyadmin:
+        container_name: dockersample_phpmyadmin
+        platform: ${DOCKER_PLATFORM:-linux/amd64}
+        image: phpmyadmin:5.2.1
+        ports:
+            - '${FORWARD_PHPMYADMIN_PORT:-3380}:80'
+        environment:
+            PMA_HOST: ${WSL_HOSTNAME}
+            PMA_USER: ${MYSQL_USERNAME}
+            PMA_PASSWORD: ${MYSQL_PASSWORD}
+    postgres:
+        container_name: dockersample_postgres
+        platform: ${DOCKER_PLATFORM:-linux/amd64}
+        image: postgres:15
+        environment:
+            POSTGRES_DB: ${PG_DATABASE}
+            POSTGRES_USER: ${PG_USERNAME}
+            POSTGRES_PASSWORD: ${PG_PASSWORD}
+        ports:
+            - '${FORWARD_POSTGRES_PORT:-5432}:5432'
+        volumes:
+            - ./data/postgres:/var/lib/postgresql/data
+        networks:
+            - dockersample_network
+    pgadmin4:
+        container_name: dockersample_pgadmin4
+        platform: ${DOCKER_PLATFORM:-linux/amd64}
+        image: dpage/pgadmin4:7
+        environment:
+            PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+            PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+        ports:
+            - '${FORWARD_PGADMIN_PORT:-4080}:80'
+        volumes:
+            - ./data/pgadmin:/var/lib/pgadmin
+        networks:
+            - dockersample_network
+    mongo:
+        container_name: dockersample_mongo
+        platform: ${DOCKER_PLATFORM:-linux/amd64}
+        image: mongo
+        ports:
+            - ${FORWARD_MONGO_PORT:-27017}:27017
+        volumes:
+            - ./data/mongo:/data/db
+        networks:
+            - dockersample_network
+    mongo-express:
+        container_name: dockersample_mongo_express
+        platform: ${DOCKER_PLATFORM:-linux/amd64}
+        image: mongo-express
+        ports:
+            - ${FORWARD_MONGO_EXPRESS_PORT:-8081}:8081
+        environment:
+            ME_CONFIG_MONGODB_SERVER: dockersample_mongo
+            ME_CONFIG_BASICAUTH_USERNAME: user
+            ME_CONFIG_BASICAUTH_PASSWORD: abc123
+        networks:
+            - dockersample_network
+    mailhog:
+        container_name: dockersample_mailhog
+        platform: ${DOCKER_PLATFORM:-linux/amd64}
+        image: mailhog/mailhog
+        logging:
+            driver: 'none'
+        ports:
+            - ${FORWARD_MAILHOG_SMTP_PORT:-1025}:1025
+            - ${FORWARD_MAILHOG_WEB_PORT:-8025}:8025
+        networks:
+            - dockersample_network
+networks:
+    dockersample_network:
+        driver: bridge
