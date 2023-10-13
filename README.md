@@ -10,7 +10,7 @@ git clone git@github.com:johnatilley/docker_samples.git
 
 cd docker_samples
 ```
-Set up files and folders
+Set up files and folders for postgres
 ```
 mkdir -p ./data/pgadmin ./data/postgres
 
