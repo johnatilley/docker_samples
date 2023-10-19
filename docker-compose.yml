@@ -77,6 +77,7 @@ services:
             PMA_HOST: ${WSL_HOSTNAME}
             PMA_USER: ${MYSQL_USERNAME}
             PMA_PASSWORD: ${MYSQL_PASSWORD}
+            UPLOAD_LIMIT: 300M
     postgres:
         container_name: dockersample_postgres
         platform: ${DOCKER_PLATFORM:-linux/amd64}
