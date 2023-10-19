@@ -10,7 +10,7 @@ services:
         ports:
             - '${FORWARD_HTTP_PORT:-80}:80'
         volumes:
-            - ./www/html:/var/www/html/
+            - ./www/html:/var/www/localhost/
         networks:
             - dockersample_network
     php:
