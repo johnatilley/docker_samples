@@ -8,11 +8,11 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt update && apt install -y software-properties-common && rm -rf /var/lib/apt/lists/*
 RUN add-apt-repository ppa:ondrej/php
 
-# Install Apache and PHP 7.2
-RUN apt update && apt install -y apache2 wget php7.2 libapache2-mod-php7.2
+# Install Apache and PHP 7.4 (change this to your needs)
+RUN apt update && apt install -y apache2 wget php7.4 libapache2-mod-php7.4
 
 # Install php extensions
-RUN apt update && apt install -y php7.2-mysql php7.2-curl php7.2-gd php7.2-mcrypt php7.2-zip
+RUN apt update && apt install -y php7.4-mysql php7.4-curl php7.4-gd php7.4-mcrypt php7.4-zip
 
 ## Apache setup
 COPY docker/http/apache2/mods-available/dir.conf /etc/apache2/mods-available/dir.conf
