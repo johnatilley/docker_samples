@@ -1,0 +1,59 @@
+.env
+data
+docker/http/.zshrc
+www/vendor
+
+# Config and Htaccess Files
+/opencart/upload/.htaccess
+/opencart/upload/config.php
+/opencart/upload/admin/config.php
+
+# Image File
+!/opencart/upload/image/no_image.jpg
+
+# Image Cache Files
+/opencart/upload/image/cache/*
+!/opencart/upload/image/cache/index.html
+
+# System Cache Files
+/opencart/upload/system/storage/cache/*
+!/opencart/upload/system/storage/cache/index.html
+
+# Modification Files
+/opencart/upload/system/storage/modification/*
+!/opencart/upload/system/storage/modification/index.html
+
+# Templates Files
+/opencart/upload/image/templates/*
+/opencart/upload/image/templates/default.jpg
+
+# Download Files
+/opencart/upload/system/storage/download/*
+!/opencart/upload/system/storage/download/index.html
+
+# Upload Files
+/opencart/upload/system/storage/upload/*
+!/opencart/upload/system/storage/upload/index.html
+
+# Flags 
+# remove sharp char if you want to add flags to gitignore
+# /upload/flags/*
+
+# Log Files
+/opencart/upload/system/storage/logs/*
+!/opencart/upload/system/storage/logs/index.html
+
+# If you want to ignore install file use following lines [on development mode]
+# /upload/backup.install/*
+# /upload/install/*
+
+# Ignore all vendor files included by composer and the lock file
+/opencart/tests/phpunit/vendor/*
+/opencart/tests/phpunit/composer.lock
+/opencart/vendor/*
+
+# Test Config File
+/opencart/tests/phpunit/bootstrap.php
+
+# IDE Project files
+/opencart/.idea

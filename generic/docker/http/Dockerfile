@@ -20,6 +20,7 @@ COPY docker/http/apache2/mods-available/dir.conf /etc/apache2/mods-available/dir
 COPY docker/http/apache2/sites-available/localhost.conf /etc/apache2/sites-available/localhost.conf
 
 RUN a2enmod rewrite
+RUN a2enmod headers
 RUN a2dissite 000-default
 RUN a2ensite localhost
 

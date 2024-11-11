@@ -1,0 +1,44 @@
+services:
+    http:
+        container_name: cakesmiths_http
+        platform: ${DOCKER_PLATFORM_http:-linux/amd64}
+        build:
+            context: .
+            dockerfile: ./docker/http/Dockerfile
+        env_file:
+            - .env
+        ports:
+            - '${FORWARD_HTTP_PORT:-80}:80'
+        volumes:
+            - ./cakesmiths:/var/www/html/
+        networks:
+            - cakesmiths_network
+    mariadb:
+        container_name: cakesmiths_mariadb
+        platform: ${DOCKER_PLATFORM_mariadb:-linux/amd64}
+        image: mariadb:10.6.17
+        ports:
+            - '${FORWARD_MARIADB_PORT:-3306}:3306'
+        environment:
+            MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+            MARIADB_USER: ${MARIADB_USER}
+            MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+            MARIADB_DATABASE: ${MARIADB_DATABASE}
+        volumes:
+            - ./data/mysql:/var/lib/mysql
+        networks:
+            - cakesmiths_network
+    mailhog:
+        container_name: cakesmiths_mailhog
+        platform: ${DOCKER_PLATFORM_mailhog:-linux/amd64}
+        image: mailhog/mailhog
+        logging:
+            driver: 'none'
+        ports:
+            - ${FORWARD_MAILHOG_SMTP_PORT:-1025}:1025
+            - ${FORWARD_MAILHOG_WEB_PORT:-8025}:8025
+        networks:
+            - cakesmiths_network
+networks:
+    cakesmiths_network:
+        driver: bridge
